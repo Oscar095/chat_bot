@@ -2,7 +2,7 @@
 azure-functions
 
 # Azure Storage (para blobs)
-azure-storage-blob
+azure-storage-blob 
 
 # Azure Identity (si usas autenticación basada en credenciales)
 azure-identity
