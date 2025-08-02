@@ -1,0 +1,36 @@
+# Azure Functions
+azure-functions
+
+# Azure Storage (para blobs)
+azure-storage-blob
+
+# Azure Identity (si usas autenticación basada en credenciales)
+azure-identity
+
+# Azure OpenAI o OpenAI directo
+openai
+
+# Si usarás integración tipo RAG con LangChain
+langchain
+tiktoken
+
+# Lectura de archivos PDF (opcional)
+PyMuPDF  # también conocido como fitz
+
+# Excel, CSV y otros formatos estructurados
+pandas
+openpyxl
+
+# JSON y texto
+python-dotenv  # Para manejar variables de entorno
+requests       # Para peticiones HTTP (por ejemplo, a Twilio)
+beautifulsoup4 # Si necesitas limpiar HTML de alguna respuesta
+
+# Manejo de logs
+loguru
+
+# Si usas cola de almacenamiento (opcional)
+azure-storage-queue
+
+# Para tiempos y fechas
+python-dateutil
