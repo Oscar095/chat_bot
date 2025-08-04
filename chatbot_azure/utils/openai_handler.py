@@ -14,13 +14,21 @@ client = AzureOpenAI(
     api_version=api_version
 )
 
-def get_chat_response(user_input):
+datos_cliente = ["Nombre:", "Direccion: " , "Telefono: ", "Ciudad: "]
+
+def get_chat_response(user_input, contexto, historial=[]):
     response = client.chat.completions.create(
         messages=[
             {
                 "role": "system",
-                "content": "Eres un asistente virtual para una empresa de empaques. Responde con información clara y útil.",
-            },
+                "content": f"""
+                Eres un asistente virtual de Kos Xpress (KX), unidad enfocada en producción de pequeñas cantidades
+                para emprendimientos, restaurantes y cafeterías. Usa el siguiente contenido para responder: {contexto}. 
+                Si el cliente necesita más detalle, indícale que un asesor lo contactará en aprox. 20 minutos. 
+                Si muestra interés en cotizar, pregúntale: “¿Deseas que te genere una cotización con base en tus productos?”. 
+                Si dice sí, solicita: {datos_cliente} y genera un formato sencillo de cotización, ten en cuenta el historial
+                del cliente : {historial}.
+            """},
             {
                 "role": "user",
                 "content": user_input,
@@ -32,4 +40,3 @@ def get_chat_response(user_input):
         model=deployment
     )
     return response.choices[0].message.content
-
