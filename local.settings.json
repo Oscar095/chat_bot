@@ -1,0 +1,15 @@
+{
+  "IsEncrypted":false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AZURE_OPENAI_API_KEY": "4xGgkUbqUmSNB0P2JznCmxVPMo218pcoRroDpFeVjZ3pLIHNEe4qJQQJ99BHACYeBjFXJ3w3AAABACOGut0x",
+    "AZURE_OPENAI_ENDPOINT": "https://ia-kos.openai.azure.com/",
+    "AZURE_OPENAI_MODEL": "gpt-35-turbo",
+    "AZURE_OPENAI_VERSION": "2024-12-01-preview",
+    "STORAGE_ACCOUNT_NAME": "tucuenta",
+    "STORAGE_ACCOUNT_KEY": "clave",
+    "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=datalakekos;AccountKey=oTik5ksIcIsOQT4KphdrNhi+QujF1396Oa49ldkfeWXHwEkGC8o6NnM+zDNckY1nU/Bs5O6n3uoD+ASttRKqoQ==;EndpointSuffix=core.windows.net"
+  },
+  "ConnectionStrings": {}
+}
