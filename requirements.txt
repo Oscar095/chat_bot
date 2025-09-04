@@ -34,3 +34,5 @@ azure-storage-queue
 
 # Para tiempos y fechas
 python-dateutil
+
+pypdf

@@ -4,6 +4,8 @@ import os
 import pandas as pd
 from io import BytesIO
 import json
+import io
+from pypdf import PdfReader
 
 connection_string = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 
@@ -14,7 +16,7 @@ def registrar_chat(usuario, rol, mensaje):
     try:
         container_name = "chat-history"
         blob_name = f"{usuario}/conversacion.json"
-
+    
         container_client = blob_service_client.get_container_client(container_name)
         try:
             container_client.create_container()
@@ -97,3 +99,21 @@ def obtener_historial_formato_gpt(usuario):
     except Exception as e:
         print(f"❌ Error cargando historial para {usuario}: {e}")
         return []
+
+def leer_pdf_blob(contenedor: str, blob_nombre: str) -> str:
+    """
+    Lee un PDF desde Azure Blob Storage y retorna su texto.
+    Requiere la variable de entorno AZURE_STORAGE_CONNECTION_STRING.
+    """
+    conn_str = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    if not conn_str:
+        raise ValueError("Falta AZURE_STORAGE_CONNECTION_STRING en variables de entorno.")
+    blob_service = BlobServiceClient.from_connection_string(conn_str)
+    blob_client = blob_service.get_blob_client(container=contenedor, blob=blob_nombre)
+    data = blob_client.download_blob().readall()
+    with io.BytesIO(data) as stream:
+        reader = PdfReader(stream)
+        texto = []
+        for page in reader.pages:
+            texto.append(page.extract_text() or "")
+    return "\n".join(texto)
