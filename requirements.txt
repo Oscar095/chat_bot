@@ -11,11 +11,11 @@ azure-identity
 openai
 
 # Si usarás integración tipo RAG con LangChain
-langchain
-tiktoken
+#langchain
+#tiktoken
 
 # Lectura de archivos PDF (opcional)
-PyMuPDF  # también conocido como fitz
+#PyMuPDF  # también conocido como fitz
 
 # Excel, CSV y otros formatos estructurados
 pandas
