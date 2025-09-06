@@ -25,15 +25,19 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      # 👇 Instalar dependencias en carpeta .python_packages (estructura que Azure Functions espera)
+      # 👇 Instalar dependencias forzando reinstalación limpia en .python_packages
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --target=".python_packages/lib/site-packages" -r requirements.txt
+          pip install --upgrade --force-reinstall --target=".python_packages/lib/site-packages" -r requirements.txt
+
+      # Eliminar virtualenvs residuales para no subir basura
+      - name: Clean up
+        run: rm -rf venv __pycache__ .pytest_cache
 
       # Crear zip de todo el proyecto + dependencias
       - name: Zip artifact for deployment
-        run: zip -r release.zip . -x '*.git*' 'venv/*'
+        run: zip -r release.zip . -x '*.git*' 'venv/*' '__pycache__/*'
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
