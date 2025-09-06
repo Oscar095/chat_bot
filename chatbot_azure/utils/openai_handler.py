@@ -1,5 +1,6 @@
 import os
 from openai import AzureOpenAI
+import httpx
 
 # Cargar datos desde variables de entorno
 endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
@@ -11,7 +12,8 @@ api_version = os.getenv("AZURE_OPENAI_VERSION")
 client = AzureOpenAI(
     api_key=api_key,
     azure_endpoint=endpoint,
-    api_version=api_version
+    api_version=api_version,
+    http_client=httpx.Client(trust_env=True)
 )
 
 datos_cliente = ["Nombre: ", "Direccion: " , "Telefono: ", "Ciudad: ","Correo: "]
