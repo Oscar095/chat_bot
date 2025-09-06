@@ -1,5 +1,3 @@
---upgrade --force-reinstall
-
 # Azure Functions
 azure-functions
 
