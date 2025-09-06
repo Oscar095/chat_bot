@@ -8,7 +8,7 @@ azure-storage-blob
 azure-identity
 
 # Azure OpenAI o OpenAI directo
-openai
+openai==1.44.1
 
 # Si usarás integración tipo RAG con LangChain
 #langchain
