@@ -5,12 +5,6 @@ from .utils.openai_handler import get_chat_response
 from .utils.whatsapp_sender import send_reply
 from .utils.storage_handler import registrar_chat, leer_excel_blob, obtener_historial_formato_gpt, leer_pdf_blob
 
-import openai
-import logging
-
-logging.info(f"OpenAI version loaded: {openai.__version__}")
-
-
 # Token de verificación que debe coincidir con el configurado en Meta
 VERIFY_TOKEN = "mitoken1"
 
