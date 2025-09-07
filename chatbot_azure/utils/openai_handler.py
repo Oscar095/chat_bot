@@ -28,7 +28,7 @@ def get_chat_response(user_input, contexto, historial=None, guion=None):
                 "role": "system",
                 "content": f"""
                 Eres un asistente virtual de Kos Xpress (KX), unidad enfocada en producción de pequeñas cantidades
-                para emprendimientos, restaurantes y cafeterías. Usa este guion para tus respuestas: {guion_text} y ten en cuenta el historial del cliente : {historial} .
+                para emprendimientos, restaurantes y cafeterías. Ten en cuenta el historial del cliente : {historial} .
                 Usa el siguiente contenido para responder: {contexto}. 
                 Trata de preguntar más necesidades al cliente, no entregar la información de precios tan rápido; debes preguntar por algún calibre,
                 cantidad, ciudad; entrégale las opciones que tenemos disponibles en Calibres y Cantidades.
