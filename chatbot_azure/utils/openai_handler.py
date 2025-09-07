@@ -16,34 +16,53 @@ client = AzureOpenAI(
     http_client=httpx.Client(trust_env=True)
 )
 
-datos_cliente = ["Nombre: ", "Direccion: " , "Telefono: ", "Ciudad: ","Correo: "]
+# Datos que pediremos al cliente para una cotización
+datos_cliente = ["Nombre", "Dirección", "Teléfono", "Ciudad", "Correo"]
 
 def get_chat_response(user_input, contexto, historial=None, guion=None):
     if historial is None:
         historial = []
-    guion_text = (guion or "")[:5000]  # evita prompts demasiado largos
+
+    # Truncar historial si es muy largo (últimos 10 turnos)
+    historial_reciente = historial[-10:]  
+
+    guion_text = (guion or "")[:2000]  # límite para no pasarnos
+
+    # Construir mensajes
+    messages = [
+        {
+            "role": "system",
+            "content": f"""
+Eres un asistente virtual de Kos Xpress (KX), especializado en empaques
+para emprendimientos, restaurantes y cafeterías.
+
+Reglas:
+- Responde de forma breve, clara y directa.
+- Usa SOLO el contexto de precios y el guion proporcionado.
+- Haz preguntas para entender calibre, cantidad y ciudad antes de dar precios.
+- Si el cliente quiere cotizar, pide estos datos: {", ".join(datos_cliente)}.
+- Si el cliente necesita más detalle, indica que un asesor lo contactará en 30 minutos.
+- Nunca inventes información que no esté en el contexto o guion.
+Contexto disponible: {contexto}
+Guion comercial: {guion_text}
+"""
+        }
+    ]
+
+    # Agregar historial real al prompt
+    for msg in historial_reciente:
+        messages.append(msg)
+
+    # Agregar el último mensaje del usuario
+    messages.append({"role": "user", "content": user_input})
+
+    # Llamada al modelo
     response = client.chat.completions.create(
-        messages=[
-            {
-                "role": "system",
-                "content": f"""
-                Eres un asistente virtual de Kos Xpress (KX), unidad enfocada en producción de pequeñas cantidades
-                para emprendimientos, restaurantes y cafeterías. Ten en cuenta el historial del cliente : {historial} .
-                Usa el siguiente contenido para responder: {contexto}. 
-                Trata de preguntar más necesidades al cliente, no entregar la información de precios tan rápido; debes preguntar por algún calibre,
-                cantidad, ciudad; entrégale las opciones que tenemos disponibles en Calibres y Cantidades.
-                Si el cliente necesita más detalle, indícale que un asesor lo contactará en aprox. 30 minutos. 
-                Si muestra interés en cotizar, pregúntale: “¿Deseas que te genere una cotización con base en tus productos?”. 
-                Si dice sí, solicita: {datos_cliente} y genera un formato sencillo de cotización.
-            """},
-            {
-                "role": "user",
-                "content": user_input,
-            }
-        ],
-        max_tokens=4096,
-        temperature=0.7,
-        top_p=1.0,
-        model=deployment
+        model=deployment,
+        messages=messages,
+        max_tokens=500,   # Limitar longitud de la respuesta
+        temperature=0.4,  # Más concreto
+        top_p=1.0
     )
+
     return response.choices[0].message.content
