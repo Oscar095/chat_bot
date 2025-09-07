@@ -5,66 +5,22 @@ from .utils.openai_handler import get_chat_response
 from .utils.whatsapp_sender import send_reply
 from .utils.storage_handler import registrar_chat, leer_excel_blob, obtener_historial_formato_gpt, leer_pdf_blob
 
+
 # Token de verificación que debe coincidir con el configurado en Meta
 VERIFY_TOKEN = "mitoken1"
 
 def _parse_post(req: func.HttpRequest) -> dict:
-    # 1) Intentar JSON
     try:
-        body = req.get_json()
-
-        # Intentar extraer desde el formato de WhatsApp Cloud API (Meta)
+        return req.get_json()
+    except Exception:
         try:
-            # value puede venir en entry[0].changes[0].value (oficial) o directamente en body["value"] (pruebas)
-            value = None
-            if isinstance(body, dict):
-                if "entry" in body:
-                    value = (body.get("entry") or [{}])[0].get("changes", [{}])[0].get("value")
-                elif "value" in body:
-                    value = body.get("value")
-
-            if isinstance(value, dict):
-                msgs = value.get("messages") or []
-                if msgs:
-                    msg = msgs[0]
-                    sender = msg.get("from") or (value.get("contacts") or [{}])[0].get("wa_id")
-
-                    text = ""
-                    mtype = msg.get("type")
-                    if mtype == "text":
-                        text = (msg.get("text") or {}).get("body", "")
-                    elif mtype == "interactive":
-                        interactive = msg.get("interactive") or {}
-                        if interactive.get("type") == "button":
-                            text = (interactive.get("button") or {}).get("text", "")
-                        elif interactive.get("type") == "list_reply":
-                            text = (interactive.get("list_reply") or {}).get("title", "")
-                        else:
-                            text = ""
-                    else:
-                        text = f"[{mtype} message]" if mtype else ""
-
-                    if sender and text:
-                        return {"Body": text, "From": sender}
-
-            # Si no era formato Meta, pero ya viene con Body/From, respétalo
-            if isinstance(body, dict) and ("Body" in body or "From" in body):
-                return body
+            form = parse_qs((req.get_body() or b"").decode("utf-8"))
+            return {
+                "Body": (form.get("Body") or [""])[0],
+                "From": (form.get("From") or [""])[0],
+            }
         except Exception:
-            pass
-
-    except Exception:
-        pass
-
-    # 2) Intentar como x-www-form-urlencoded
-    try:
-        form = parse_qs((req.get_body() or b"").decode("utf-8"))
-        return {
-            "Body": (form.get("Body") or [""])[0],
-            "From": (form.get("From") or [""])[0],
-        }
-    except Exception:
-        return {}
+            return {}
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
