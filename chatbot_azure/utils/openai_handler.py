@@ -34,16 +34,15 @@ def get_chat_response(user_input, contexto, historial=None, guion=None):
             "role": "system",
             "content": f"""
 Eres un asistente virtual de Kos Xpress (KX), especializado en empaques
-para emprendimientos, restaurantes y cafeterías.
+para alimentos en restaurantes y cafeterías.
 
 Reglas:
 - Responde de forma breve, clara y directa.
-- Usa SOLO el contexto de precios y el guion proporcionado.
+- Usa SOLO el contexto de precios y condiciones proporcionadas en {contexto}.
 - Haz preguntas para entender calibre, cantidad y ciudad antes de dar precios.
 - Si el cliente quiere cotizar, pide estos datos: {", ".join(datos_cliente)}.
 - Si el cliente necesita más detalle, indica que un asesor lo contactará en 30 minutos.
-- Nunca inventes información que no esté en el contexto o guion.
-Contexto disponible: {contexto}
+- Nunca inventes información que no esté en las condiciones o guion.
 Guion comercial: {guion_text}
 """
         }
@@ -61,7 +60,7 @@ Guion comercial: {guion_text}
         model=deployment,
         messages=messages,
         max_tokens=500,   # Limitar longitud de la respuesta
-        temperature=0.4,  # Más concreto
+        temperature=0.5,  # Más concreto
         top_p=1.0
     )
 
